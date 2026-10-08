@@ -103,3 +103,13 @@ def test_TC10_captcha_shown_after_third_failure(login_page, settings):
     assert login_page.captcha_input() is not None, (
         "Expected CAPTCHA to appear after three failed login attempts."
     )
+
+def test_TC11_valid_password_without_captcha_is_rejected(login_page, settings):
+    username, password = _valid_credentials(settings, "TC11")
+    _fail_login_attempts(login_page, username, 3)
+    assert login_page.captcha_input() is not None, "CAPTCHA was not presented."
+    login_page.login(username, password)
+    login_page.assert_login_rejected()
+    assert login_page.captcha_input() is not None or login_page.error_message(), (
+        "Expected CAPTCHA-required validation."
+    )
