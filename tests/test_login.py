@@ -71,4 +71,8 @@ def test_TC06_valid_username_wrong_password_is_rejected(login_page, settings):
     login_page.assert_login_rejected()
     assert login_page.error_message(), "Expected an authentication failure message."
 
+def test_TC07_wrong_username_valid_password_is_rejected(login_page, settings):
+    _, password = _valid_credentials(settings, "TC07")
+    login_page.login("wrong_user", password)
+    login_page.assert_login_rejected()
 
