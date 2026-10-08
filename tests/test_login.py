@@ -166,3 +166,10 @@ def test_TC17_oversized_username_does_not_crash_or_authenticate(login_page):
     login_page.assert_no_server_error("Oversized username")
     assert not login_page.has_sql_error(), "SQL/database error was exposed."
 
+def test_TC18_oversized_password_does_not_crash_or_authenticate(
+    login_page, settings
+):
+    username, _ = _valid_credentials(settings, "TC18")
+    login_page.login(username, "p" * 500)
+    login_page.assert_login_rejected()
+    login_page.assert_no_server_error("Oversized password")
