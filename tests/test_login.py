@@ -135,3 +135,23 @@ def test_TC13_wrong_captcha_is_rejected(login_page, settings):
     login_page.assert_login_rejected()
     assert login_page.error_message(), "Expected an invalid-CAPTCHA message."
 
+@pytest.mark.parametrize(
+    ("case_id", "username", "password"),
+    [
+        ("TC14", "  user01  ", "configured"),
+        ("TC15", "configured", "  password123  "),
+    ],
+    ids=["TC14-username-surrounding-spaces", "TC15-password-surrounding-spaces"],
+)
+def test_whitespace_credentials_do_not_crash(
+    login_page, settings, case_id, username, password
+):
+    valid_username = _username(settings, case_id)
+    password_value = settings["password"] if password == "configured" else password
+    assert password_value, "Set UTC_LOGIN_PASSWORD to a test account password."
+    login_page.login(
+        valid_username if username == "configured" else username,
+        password_value,
+    )
+    login_page.assert_no_server_error(case_id)
+
