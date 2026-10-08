@@ -155,3 +155,7 @@ def test_whitespace_credentials_do_not_crash(
     )
     login_page.assert_no_server_error(case_id)
 
+def test_TC16_special_characters_are_rejected_safely(login_page):
+    login_page.login("!@#$%^&*()", "Abc@123")
+    login_page.assert_login_rejected()
+    assert not login_page.has_sql_error(), "SQL/database error was exposed."
