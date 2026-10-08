@@ -126,3 +126,12 @@ def test_TC12_correct_captcha_and_password_open_dashboard(login_page, settings):
     assert login_page.is_logged_in(), (
         "Valid credentials and CAPTCHA did not open the dashboard."
     )
+
+
+def test_TC13_wrong_captcha_is_rejected(login_page, settings):
+    username, password = _valid_credentials(settings, "TC13")
+    _fail_login_attempts(login_page, username, 3)
+    login_page.login(username, password, "invalid-captcha-answer")
+    login_page.assert_login_rejected()
+    assert login_page.error_message(), "Expected an invalid-CAPTCHA message."
+
