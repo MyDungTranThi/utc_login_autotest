@@ -113,3 +113,16 @@ def test_TC11_valid_password_without_captcha_is_rejected(login_page, settings):
     assert login_page.captcha_input() is not None or login_page.error_message(), (
         "Expected CAPTCHA-required validation."
     )
+
+def test_TC12_correct_captcha_and_password_open_dashboard(login_page, settings):
+    username, password = _valid_credentials(settings, "TC12")
+    captcha_answer = settings["captcha_answer"]
+    assert captcha_answer, (
+        "Set UTC_LOGIN_CAPTCHA_ANSWER to a valid CAPTCHA answer in the test "
+        "environment."
+    )
+    _fail_login_attempts(login_page, username, 3)
+    login_page.login(username, password, captcha_answer)
+    assert login_page.is_logged_in(), (
+        "Valid credentials and CAPTCHA did not open the dashboard."
+    )
