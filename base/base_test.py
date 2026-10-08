@@ -19,7 +19,7 @@ class BaseTest:
             "captcha_answer": os.getenv("UTC_LOGIN_CAPTCHA_ANSWER", ""),
             "timeout": float(os.getenv("UTC_LOGIN_TIMEOUT", "10")),
             "browser": os.getenv("UTC_LOGIN_BROWSER", "chrome").lower(),
-            "headless": os.getenv("UTC_LOGIN_HEADLESS", "true").lower() == "true",
+            "headless": os.getenv("UTC_LOGIN_HEADLESS", "false").lower() == "true",
             "username_selector": os.getenv(
                 "UTC_LOGIN_USERNAME_SELECTOR",
                 "input[name='username'], input[name='email'], #username",
