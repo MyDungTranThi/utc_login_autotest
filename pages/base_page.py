@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -25,6 +26,7 @@ class BasePage:
             message=f"Could not find {description}: {selector}",
         )
 
+    @allure.step("Navigate to linked page")
     def click_link(self, xpath, expected_url_contains):
         link = self.required_present(By.XPATH, xpath, "link")
         self.driver.execute_script("arguments[0].click();", link)

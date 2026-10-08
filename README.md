@@ -29,13 +29,34 @@ py -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-Configure test credentials and run the suite from the project directory:
+The sample test credentials are set in code as `huongnt` and `123456@utc`.
+Override them with environment variables when needed, then run the suite:
 
 ```powershell
 $env:UTC_LOGIN_USERNAME = "test-user"
 $env:UTC_LOGIN_PASSWORD = "test-password"
 python -m pytest
 ```
+
+Pytest automatically writes Allure results to `allure-results`. To open the
+interactive report after the run, install Node.js and Java, then run Allure
+through `npx`:
+
+```powershell
+npx --yes allure-commandline serve allure-results
+```
+
+`allure serve` builds a temporary report and opens it in the browser. To create
+a persistent HTML report instead:
+
+```powershell
+npx --yes allure-commandline generate allure-results --clean -o allure-report
+npx --yes allure-commandline open allure-report
+```
+
+Each test is labelled with its testcase ID, title, and `UTC Login` feature/story.
+Failed tests also include a browser screenshot when the WebDriver is available.
+The generated `allure-results` and `allure-report` folders are excluded from Git.
 
 `UTC_LOGIN_URL` defaults to `https://vanphongdientu.utc.edu.vn/Login`.
 

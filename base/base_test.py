@@ -14,8 +14,8 @@ class BaseTest:
             "base_url": os.getenv(
                 "UTC_LOGIN_URL", "https://vanphongdientu.utc.edu.vn/Login"
             ),
-            "username": os.getenv("UTC_LOGIN_USERNAME", ""),
-            "password": os.getenv("UTC_LOGIN_PASSWORD", ""),
+            "username": os.getenv("UTC_LOGIN_USERNAME", "huongnt"),
+            "password": os.getenv("UTC_LOGIN_PASSWORD", "123456@utc"),
             "captcha_answer": os.getenv("UTC_LOGIN_CAPTCHA_ANSWER", ""),
             "timeout": float(os.getenv("UTC_LOGIN_TIMEOUT", "10")),
             "browser": os.getenv("UTC_LOGIN_BROWSER", "chrome").lower(),

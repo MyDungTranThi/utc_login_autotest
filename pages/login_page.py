@@ -1,5 +1,6 @@
 import re
 
+import allure
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
@@ -7,6 +8,7 @@ from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
+    @allure.step("Open login page")
     def open(self):
         self.driver.get(self.settings["base_url"])
         self.username_input()
@@ -44,6 +46,7 @@ class LoginPage(BasePage):
             )
             self._set_value(field, captcha)
 
+    @allure.step("Submit login form")
     def submit(self):
         button = self.required_visible(
             By.CSS_SELECTOR, self.settings["submit_selector"], "login submit button"
