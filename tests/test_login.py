@@ -76,3 +76,16 @@ def test_TC07_wrong_username_valid_password_is_rejected(login_page, settings):
     login_page.login("wrong_user", password)
     login_page.assert_login_rejected()
 
+
+def _fail_login_attempts(login_page, username, count):
+    for _ in range(count):
+        login_page.login(username, "WrongPassword123")
+        login_page.assert_login_rejected()
+
+
+def test_TC08_captcha_not_shown_after_first_failure(login_page, settings):
+    username, _ = _valid_credentials(settings, "TC08")
+    _fail_login_attempts(login_page, username, 1)
+    assert login_page.captcha_input() is None, (
+        "CAPTCHA appeared before the third failed login attempt."
+    )
