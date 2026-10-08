@@ -173,3 +173,30 @@ def test_TC18_oversized_password_does_not_crash_or_authenticate(
     login_page.login(username, "p" * 500)
     login_page.assert_login_rejected()
     login_page.assert_no_server_error("Oversized password")
+
+@pytest.mark.parametrize(
+    ("case_id", "username", "password"),
+    [
+        ("TC19", "' OR '1'='1", "anything"),
+        ("TC20", "configured", "' OR '1'='1"),
+        ("TC21", "admin' --", "anything"),
+    ],
+    ids=[
+        "TC19-sql-injection-username",
+        "TC20-sql-injection-password",
+        "TC21-sql-comment-injection",
+    ],
+)
+def test_sql_injection_payloads_do_not_bypass_authentication(
+    login_page, settings, case_id, username, password
+):
+    username_value = (
+        _username(settings, case_id) if username == "configured" else username
+    )
+    assert username_value, (
+        f"Set UTC_LOGIN_USERNAME or UTC_LOGIN_USERNAME_{case_id} "
+        "to the valid test account username."
+    )
+    login_page.login(username_value, password)
+    login_page.assert_login_rejected()
+    assert not login_page.has_sql_error(), "SQL/database error was exposed."
