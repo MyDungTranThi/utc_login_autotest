@@ -33,3 +33,31 @@ def test_TC01_valid_credentials_open_dashboard(login_page, settings):
     login_page.login(username, password)
     assert login_page.is_logged_in(), ("Valid credentials did not open the dashboard.")
 
+@pytest.mark.parametrize(
+    ("case_id", "username", "password"),
+    [
+        ("TC02", "", "not-used-test-password"),
+        ("TC03", "not-used-test-user", ""),
+        ("TC04", "", ""),
+    ],
+    ids=["TC02-empty-username", "TC03-empty-password", "TC04-both-empty"],
+)
+def test_required_login_fields(login_page, case_id, username, password):
+    login_page.fill(username=username, password=password)
+    username_input = login_page.username_input()
+    password_input = login_page.password_input()
+    username_invalid = login_page.field_is_required(username_input)
+    password_invalid = login_page.field_is_required(password_input)
+    login_page.submit()
+
+    assert username_invalid or login_page.error_message(), (
+        f"{case_id}: expected required-field validation."
+    )
+    assert password_invalid or login_page.error_message(), (
+        f"{case_id}: expected required-field validation."
+    )
+    assert login_page.driver.current_url.rstrip("/").lower().endswith("/login"), (
+        f"{case_id}: blank credentials unexpectedly navigated away from login."
+    )
+
+
