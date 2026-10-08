@@ -203,3 +203,37 @@ def test_sql_injection_payloads_do_not_bypass_authentication(
 
 def test_TC22_password_input_is_masked(login_page):
     assert login_page.password_input().get_attribute("type") == "password"
+
+def test_TC23_remember_me_checkbox_is_available(login_page, settings):
+    checkbox = login_page._required_present(
+        By.CSS_SELECTOR, settings["remember_selector"], "Remember Me checkbox"
+    )
+    assert checkbox.get_attribute("type") == "checkbox"
+    if not checkbox.is_selected():
+        if checkbox.is_displayed():
+            checkbox.click()
+        else:
+            checkbox_id = checkbox.get_attribute("id")
+            assert checkbox_id, "Hidden Remember Me checkbox has no associated label."
+            label = login_page.driver.find_element(
+                By.CSS_SELECTOR, f"label[for='{checkbox_id}']"
+            )
+            label.click()
+    assert checkbox.is_selected(), "Remember Me checkbox could not be selected."
+
+    username, password = _valid_credentials(settings, "TC23")
+    login_page.login(username, password)
+    assert login_page.is_logged_in(), (
+        "Login with Remember Me selected did not open the dashboard."
+    )
+    browser_storage = login_page.driver.execute_script(
+        "return JSON.stringify({local: window.localStorage, "
+        "session: window.sessionStorage});"
+    )
+    cookies = " ".join(
+        cookie["name"] + "=" + cookie["value"]
+        for cookie in login_page.driver.get_cookies()
+    )
+    assert password not in browser_storage and password not in cookies, (
+        "The password appears to be stored in plaintext in browser storage."
+    )
