@@ -200,3 +200,6 @@ def test_sql_injection_payloads_do_not_bypass_authentication(
     login_page.login(username_value, password)
     login_page.assert_login_rejected()
     assert not login_page.has_sql_error(), "SQL/database error was exposed."
+
+def test_TC22_password_input_is_masked(login_page):
+    assert login_page.password_input().get_attribute("type") == "password"
