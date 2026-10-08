@@ -60,4 +60,9 @@ def test_required_login_fields(login_page, case_id, username, password):
         f"{case_id}: blank credentials unexpectedly navigated away from login."
     )
 
+def test_TC05_unknown_username_is_rejected(login_page):
+    login_page.login("user_not_exist_999", "Abc@123")
+    login_page.assert_login_rejected()
+    assert login_page.error_message(), "Expected an authentication failure message."
+
 
