@@ -89,3 +89,10 @@ def test_TC08_captcha_not_shown_after_first_failure(login_page, settings):
     assert login_page.captcha_input() is None, (
         "CAPTCHA appeared before the third failed login attempt."
     )
+
+def test_TC09_captcha_not_shown_after_second_failure(login_page, settings):
+    username, _ = _valid_credentials(settings, "TC09")
+    _fail_login_attempts(login_page, username, 2)
+    assert login_page.captcha_input() is None, (
+        "CAPTCHA appeared before the third failed login attempt."
+    )
