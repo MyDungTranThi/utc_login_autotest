@@ -237,3 +237,7 @@ def test_TC23_remember_me_checkbox_is_available(login_page, settings):
     assert password not in browser_storage and password not in cookies, (
         "The password appears to be stored in plaintext in browser storage."
     )
+
+def test_TC24_utc_email_login_redirects_to_sso(login_page, settings):
+    login_page.click_link(settings["sso_link_xpath"], settings["sso_url"])
+    assert settings["sso_url"] in login_page.driver.current_url.lower()
