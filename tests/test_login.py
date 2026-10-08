@@ -241,3 +241,9 @@ def test_TC23_remember_me_checkbox_is_available(login_page, settings):
 def test_TC24_utc_email_login_redirects_to_sso(login_page, settings):
     login_page.click_link(settings["sso_link_xpath"], settings["sso_url"])
     assert settings["sso_url"] in login_page.driver.current_url.lower()
+
+def test_TC25_forgot_password_redirects(login_page, settings):
+    login_page.click_link(
+        settings["forgot_link_xpath"], settings["forgot_url"]
+    )
+    assert settings["forgot_url"] in login_page.driver.current_url.lower()
