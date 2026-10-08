@@ -8,6 +8,19 @@ test account before running those cases. Repeated failures can trigger CAPTCHA
 or account lockout on the live site, so a test environment is strongly
 recommended.
 
+## Project structure
+
+```text
+base/
+  base_test.py       # WebDriver setup and test configuration
+pages/
+  base_page.py       # Shared page actions and waits
+  login_page.py      # Login page objects and actions
+tests/
+  conftest.py        # Pytest fixtures
+  test_login.py      # Login test scripts
+```
+
 ## Install and run
 
 ```powershell
